@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_admin_responsess', function (Blueprint $table) {
-            $table->id();
+        Schema::create('admin_responsess', function (Blueprint $table) {
+            $table->increments('id')->nullable();
             $table->String('response_text');
-            $table->unsignedBigInteger('complaint_id');
-            $table->foreign('complaint_id')->references('id')->on('_complaint_categories')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id');
+            // $table->foreign('category_id')->references('id')->on('complaint_categories')->onDelete('cascade');
             $table->unsignedBigInteger('admin_id');
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_admin_responsess');
+        Schema::dropIfExists('admin_responsess');
     }
 };

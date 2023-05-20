@@ -20,32 +20,59 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::post('/usercomplaint',function( Request $request){
-//     dd($request->all());
-//     $input=$request->all();
-//     responses::create($input);
-
-//   return redirect('/complaint');
-// })->name('usercomplaint');
-
-
-Route::get('/', function () {
-    return view('website.index');
-});
+// Route::get('/', function () {
+//     return view('website.index');
+// });
 
 Route::get('/userdashboard', function () {
-    return view('dashboard');
+    // return view('dashboard');
+    return  view('students.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+///when you have logged in
+
 Route::middleware('auth')->group(function () {
+
+
     Route::get('/contact', function () {
         return view('website.contact.index');
     });
 
+    ///students routes
+    // Route::get('/student',function() {
+        
+    // });
+
+    Route::get('/totalcomplaints',[studentcontroller::class,'totalcomplaints']);
+
+    Route::get('/responses',[studentcontroller::class,'responses']);
+
+    Route::get('/pendingcompliants',[studentcontroller::class,'pendingcompliants']);
+
+    Route::get('/userdashboard',[studentcontroller::class,'userdashboard']);
+
+    Route::get('/studentmarks',[studentcontroller::class,'marksindex']);
+
+    Route::post('/postmarks',[studentcontroller::class,'storemarks']);
+    
+    Route::get('/studentregistration',[studentcontroller::class,'registrationindex']);
+
+    Route::post('/postregistration',[studentcontroller::class,'storeregistration']);
+    
+    Route::get('/studenttuition',[studentcontroller::class,'tutionindex']);
+
+    Route::post('/posttution',[studentcontroller::class,'storetution']);
+    
+    
+    
+    
 
 
-    Route::resource('/sent', ComplaintsController::class);
-    Route::resource('/inbox', ResponsesController::class);
+
+
+    // Route::resource("/student", studentcontroller::class);
+    // Route::resource('/sent', ComplaintsController::class);
+    // Route::resource('/inbox', ResponsesController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -53,7 +80,7 @@ Route::middleware('auth')->group(function () {
 
 
 ////admindashboard
-Route::resource("/student", studentcontroller::class);
+
 
 
 
@@ -72,31 +99,7 @@ Route::get('/tuition',function(){
 
 Route::get('/admin',function() {
     $total=Complaints::count();
-    return  view('admin.index',['total'=>$total]);
+    return  view('student.index',['total'=>$total]);
 });
-
-
-Route::get('/complaint',function (){
-    $complaints=Complaints::all();
-    return view('admin.complaints.index',['complaints'=>$complaints]);
-});
-
-Route::get('/responses',function(){
-    return view('admin.responses.index');
-});
-
-Route::get('/users',function(){
-    return view('admin.users.index');
-});
-
-Route::post('/replying',function( Request $request){
-       $input=$request->all();
-       responses::create($input);
-
-     return redirect('/complaint');
-});
-
-
-
 
 require __DIR__.'/auth.php';
