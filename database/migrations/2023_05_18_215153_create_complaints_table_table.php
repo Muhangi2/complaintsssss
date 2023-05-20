@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_user_responses', function (Blueprint $table) {
+        Schema::create('complaints_table', function (Blueprint $table) {
             $table->id();
-            $table->String('response_text');
-            $table->unsignedBigInteger('complaint_id');
-            $table->foreign('complaint_id')->references('id')->on('_complaint_categories')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id')->nullable();
+            // $table->foreign('category_id')->references('id')->on('complaint_categories')->onDelete('cascade');
+            $table->unsignedBigInteger('course_id')->nullable();
+            // $table->foreign('course_id')->references('id')->on('course_categories')->onDelete('cascade');
+            $table->longText('description');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_user_responses');
+        Schema::dropIfExists('complaints_table');
     }
 };
